@@ -526,7 +526,7 @@ function renderTable() {
   updateSortHeaderIndicators();
 
   if (!state.departments.length) {
-    departmentRows.innerHTML = '<tr><td colspan="7" class="empty-state">No department data available.</td></tr>';
+    departmentRows.innerHTML = '<tr><td colspan="5" class="empty-state">No department data available.</td></tr>';
     return;
   }
 
@@ -536,8 +536,6 @@ function renderTable() {
       (d) => `
       <tr>
         <td>${escapeHtml(d.acronym)}</td>
-        <td>${formatNumber(d.headcount)}</td>
-        <td>${d.conversionRate != null ? formatNumber(d.badgeUsers) : "-"}</td>
         <td>${d.conversionRate != null ? `${d.conversionRate.toFixed(1)}%` : "-"}</td>
         <td>${escapeHtml(d.quarter || "-")}</td>
         <td>${d.rolloutDate ? formatDate(d.rolloutDate) : "-"}</td>
