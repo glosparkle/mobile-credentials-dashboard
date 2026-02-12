@@ -264,10 +264,10 @@ input[type="file"]::file-selector-button,
 }
 
 .coverage-item {
-  border: 1px solid #d7e6f5;
+  border: 1px solid #d0d0d0;
   border-radius: 10px;
   padding: 0.48rem 0.55rem;
-  background: #fbfeff;
+  background: #f1f1f1;
 }
 
 .coverage-item-head {
@@ -283,15 +283,15 @@ input[type="file"]::file-selector-button,
 }
 
 .quarter-q1 {
-  color: #b58f00;
+  color: #ffd800;
 }
 
 .quarter-q2 {
-  color: #008b8b;
+  color: #40e0d0;
 }
 
 .quarter-q3 {
-  color: #c76a00;
+  color: #f8a84b;
 }
 
 .quarter-q4 {
