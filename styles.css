@@ -267,7 +267,7 @@ input[type="file"]::file-selector-button,
   border: 1px solid #a9a9a9;
   border-radius: 10px;
   padding: 0.48rem 0.55rem;
-  background: #c3c3c3;
+  background: #eaeaea;
 }
 
 .coverage-item-head {
