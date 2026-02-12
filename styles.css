@@ -283,19 +283,19 @@ input[type="file"]::file-selector-button,
 }
 
 .quarter-q1 {
-  color: #d89913;
+  color: #ffd800;
 }
 
 .quarter-q2 {
-  color: #8eafd7;
+  color: #40e0d0;
 }
 
 .quarter-q3 {
-  color: #b36d4f;
+  color: #f88105;
 }
 
 .quarter-q4 {
-  color: #1f4f5a;
+  color: #9a78e9;
 }
 
 .coverage-item-value {
