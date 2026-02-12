@@ -282,6 +282,22 @@ input[type="file"]::file-selector-button,
   font-weight: 700;
 }
 
+.quarter-q1 {
+  color: #d89913;
+}
+
+.quarter-q2 {
+  color: #8eafd7;
+}
+
+.quarter-q3 {
+  color: #b36d4f;
+}
+
+.quarter-q4 {
+  color: #1f4f5a;
+}
+
 .coverage-item-value {
   font-size: 0.8rem;
   color: var(--text-muted);

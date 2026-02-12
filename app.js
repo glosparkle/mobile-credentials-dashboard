@@ -405,7 +405,7 @@ function renderDepartmentBars() {
       (d) => `
       <div class="coverage-item">
         <div class="coverage-item-head">
-          <span class="metric-row-name" title="${escapeHtml(d.acronym)}">${escapeHtml(d.acronym)}</span>
+          <span class="metric-row-name ${quarterClass(d.quarter)}" title="${escapeHtml(d.acronym)}">${escapeHtml(d.acronym)}</span>
           <span class="coverage-item-value">${(d.conversionRate || 0).toFixed(1)}%</span>
         </div>
         <div class="track">
@@ -423,22 +423,23 @@ function renderDepartmentBars() {
 }
 
 function renderPhaseBars() {
-  if (!state.phases.length) {
+  if (!state.departments.length) {
     phaseBars.innerHTML = '<p class="empty-state">No quarter/phase data found.</p>';
     return;
   }
 
-  const totalDepartments = Math.max(state.departments.length, 1);
-  phaseBars.innerHTML = state.phases
+  const activeQuarter = quarterFromDate(new Date());
+  const phases = ["Q1", "Q2", "Q3", "Q4"];
+  phaseBars.innerHTML = phases
     .map(
-      (p) => `
+      (phase) => `
       <div class="metric-row">
-        <span class="metric-row-name">${escapeHtml(p.phase)}</span>
+        <span class="metric-row-name">${phase}</span>
         <div class="track">
           <div class="fill" style="width:100%"></div>
-          <div class="fill-secondary" style="width:${((p.total / totalDepartments) * 100).toFixed(1)}%"></div>
+          <div class="fill-secondary" style="width:${phase === activeQuarter ? "100.0" : "0.0"}%"></div>
         </div>
-        <span>${((p.total / totalDepartments) * 100).toFixed(1)}%</span>
+        <span>${phase === activeQuarter ? "100.0%" : "0.0%"}</span>
       </div>
     `
     )
@@ -485,14 +486,12 @@ function renderForecast() {
 
   const next30Rows = byDate(next30);
   const next90Rows = byDate(next90);
-  const unscheduled = state.departments.length - scheduled.length;
   const next30Headcount = next30Rows.reduce((sum, d) => sum + d.headcount, 0);
 
   const rows = [
     { label: "Next 30 Days", value: `${next30Rows.length} depts` },
     { label: "30-Day Headcount", value: formatNumber(next30Headcount) },
-    { label: "Next 90 Days", value: `${next90Rows.length} depts` },
-    { label: "Unscheduled", value: `${unscheduled} depts` }
+    { label: "Next 90 Days", value: `${next90Rows.length} depts` }
   ];
 
   forecastGrid.innerHTML = rows
@@ -733,6 +732,14 @@ function statusClass(status) {
   if (status === "Watch") return "watch";
   if (status === "Complete") return "complete";
   return "on-track";
+}
+
+function quarterClass(quarter) {
+  if (quarter === "Q1") return "quarter-q1";
+  if (quarter === "Q2") return "quarter-q2";
+  if (quarter === "Q3") return "quarter-q3";
+  if (quarter === "Q4") return "quarter-q4";
+  return "";
 }
 
 function escapeHtml(text) {
