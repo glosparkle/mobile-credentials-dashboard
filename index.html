@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mobile Credential Department Rollout Analytics</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="page-bg"></div>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Enterprise Access Modernization</p>
+          <h1>Mobile Credentials Department Rollout Dashboard</h1>
+          <p id="globalStatus" class="import-status strong">Loading latest roadmap data...</p>
+        </div>
+      </header>
+
+      <section class="kpi-grid" id="kpiGrid"></section>
+
+      <section class="panel-grid">
+        <article class="panel">
+          <div class="panel-header">
+            <h2>Roadmap Phase Progress</h2>
+            <span class="panel-note">Milestone completion by phase</span>
+          </div>
+          <div id="phaseBars" class="metric-bars"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <h2>Delivery Health</h2>
+            <span class="panel-note">Department status distribution</span>
+          </div>
+          <div id="healthGrid" class="health-grid"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-header">
+            <h2>Rollout Forecast</h2>
+            <span class="panel-note">Near-term delivery outlook</span>
+          </div>
+          <div id="forecastGrid" class="health-grid"></div>
+        </article>
+
+        <article class="panel span-2">
+          <div class="panel-header">
+            <h2>Department Completion Coverage</h2>
+            <span class="panel-note" id="deptCoverageNote"></span>
+          </div>
+          <div id="departmentBars" class="metric-bars coverage-grid"></div>
+        </article>
+
+        <article class="panel span-2">
+          <div class="panel-header">
+            <h2>Upcoming Milestones</h2>
+            <span class="panel-note" id="timelineWindow"></span>
+          </div>
+          <ol id="timelineList" class="timeline-list"></ol>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Department Rollout Readiness</h2>
+          <span class="panel-note">Workforce and roadmap alignment</span>
+        </div>
+        <div class="table-wrap">
+          <table id="readinessTable">
+            <thead>
+              <tr>
+                <th data-sort="acronym" data-label="Dept">Dept</th>
+                <th data-sort="headcount" data-label="Headcount">Headcount</th>
+                <th data-sort="badgeUsers" data-label="Digital Badge">Digital Badge</th>
+                <th data-sort="conversionRate" data-label="Conversion">Conversion</th>
+                <th data-sort="quarter" data-label="Quarter">Quarter</th>
+                <th data-sort="rolloutDate" data-label="Rollout Date">Rollout Date</th>
+                <th data-sort="status" data-label="Status">Status</th>
+              </tr>
+            </thead>
+            <tbody id="departmentRows"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
