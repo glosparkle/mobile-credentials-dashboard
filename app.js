@@ -27,7 +27,6 @@ const timelineList = document.getElementById("timelineList");
 const timelineWindow = document.getElementById("timelineWindow");
 const forecastGrid = document.getElementById("forecastGrid");
 const departmentRows = document.getElementById("departmentRows");
-const globalStatus = document.getElementById("globalStatus");
 const readinessTableHeaders = document.querySelectorAll("#readinessTable thead th[data-sort]");
 
 function setup() {
@@ -37,8 +36,6 @@ function setup() {
 
 async function loadHostedData() {
   try {
-    globalStatus.textContent = "Loading latest roadmap data...";
-
     if (typeof XLSX === "undefined") {
       throw new Error("Workbook parser failed to load");
     }
@@ -60,7 +57,8 @@ async function loadHostedData() {
     state.health = [];
     state.summary = null;
     render();
-    globalStatus.textContent = `Data load error: ${error.message}`;
+    // Keep dashboard visible even if workbook is temporarily unavailable.
+    console.error(`Data load error: ${error.message}`);
   }
 }
 
@@ -362,7 +360,6 @@ function render() {
   renderTimeline();
   renderForecast();
   renderTable();
-  renderStatus();
 }
 
 function renderKpis() {
@@ -388,7 +385,6 @@ function renderKpis() {
       <article class="kpi-card">
         <p class="kpi-label">${card.label}</p>
         <p class="kpi-value">${card.value}</p>
-        <p class="kpi-trend">${card.trend}</p>
       </article>
     `
     )
@@ -432,14 +428,17 @@ function renderPhaseBars() {
     return;
   }
 
-  const max = Math.max(...state.phases.map((p) => p.total), 1);
+  const totalDepartments = Math.max(state.departments.length, 1);
   phaseBars.innerHTML = state.phases
     .map(
       (p) => `
       <div class="metric-row">
         <span class="metric-row-name">${escapeHtml(p.phase)}</span>
-        <div class="track"><div class="fill" style="width:${((p.total / max) * 100).toFixed(1)}%"></div></div>
-        <span>${p.total} depts</span>
+        <div class="track">
+          <div class="fill" style="width:100%"></div>
+          <div class="fill-secondary" style="width:${((p.total / totalDepartments) * 100).toFixed(1)}%"></div>
+        </div>
+        <span>${((p.total / totalDepartments) * 100).toFixed(1)}%</span>
       </div>
     `
     )
@@ -611,19 +610,6 @@ function sortableValue(dept, key) {
     return Number.isFinite(dept.conversionRate) ? dept.conversionRate : null;
   }
   return dept[key];
-}
-
-function renderStatus() {
-  if (!state.summary) {
-    globalStatus.textContent = "Loading latest roadmap data...";
-    return;
-  }
-
-  const loadedTime = state.meta.lastLoadedAt
-    ? new Date(state.meta.lastLoadedAt).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
-    : "-";
-
-  globalStatus.textContent = `Live data loaded (${state.meta.sheetsScanned} sheets) • Updated ${loadedTime}`;
 }
 
 function deriveStatus(rolloutDate, note) {

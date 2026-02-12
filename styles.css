@@ -241,7 +241,7 @@ input[type="file"]::file-selector-button,
   top: 0;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #9fd4ff, #6fb8f5);
+  background: linear-gradient(90deg, #dff1ff, #cbe8ff);
 }
 
 .fill-secondary {
