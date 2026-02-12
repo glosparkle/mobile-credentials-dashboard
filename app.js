@@ -28,6 +28,7 @@ const timelineWindow = document.getElementById("timelineWindow");
 const forecastGrid = document.getElementById("forecastGrid");
 const rollout2027Grid = document.getElementById("rollout2027Grid");
 const departmentRows = document.getElementById("departmentRows");
+const lastRefresh = document.getElementById("lastRefresh");
 const readinessTableHeaders = document.querySelectorAll("#readinessTable thead th[data-sort]");
 
 function setup() {
@@ -46,10 +47,11 @@ async function loadHostedData() {
       throw new Error(`Unable to load ${DATA_WORKBOOK_URL} (${response.status})`);
     }
 
+    const lastModifiedHeader = response.headers.get("last-modified");
     const buffer = await response.arrayBuffer();
     const workbook = XLSX.read(buffer, { type: "array" });
     const parsed = parseRoadmapWorkbook(workbook);
-    applyParsedData(parsed);
+    applyParsedData(parsed, workbook, lastModifiedHeader);
     render();
   } catch (error) {
     state.departments = [];
@@ -60,6 +62,7 @@ async function loadHostedData() {
     render();
     // Keep dashboard visible even if workbook is temporarily unavailable.
     console.error(`Data load error: ${error.message}`);
+    if (lastRefresh) lastRefresh.textContent = "Last data refresh: unavailable";
   }
 }
 
@@ -230,7 +233,7 @@ function findColumnIndex(headers, aliases) {
   return -1;
 }
 
-function applyParsedData(parsed) {
+function applyParsedData(parsed, workbook, lastModifiedHeader) {
   const deptMap = new Map();
 
   parsed.deptRows.forEach((row) => {
@@ -296,7 +299,14 @@ function applyParsedData(parsed) {
   state.meta.sheetsScanned = parsed.sheetsScanned;
   state.meta.deptRows = parsed.deptRows.length;
   state.meta.timelineRows = parsed.timelineRows.length;
-  state.meta.lastLoadedAt = new Date();
+  const workbookModified = workbook && workbook.Props && workbook.Props.ModifiedDate instanceof Date
+    ? workbook.Props.ModifiedDate
+    : null;
+  const headerModified = lastModifiedHeader ? new Date(lastModifiedHeader) : null;
+  const refreshDate = workbookModified
+    || (headerModified instanceof Date && !Number.isNaN(headerModified.getTime()) ? headerModified : null)
+    || new Date();
+  state.meta.lastLoadedAt = refreshDate;
 }
 
 function createDeptRecord(acronym) {
@@ -362,6 +372,7 @@ function render() {
   renderForecast();
   renderTable();
   render2027Outlook();
+  renderLastRefresh();
 }
 
 function renderKpis() {
@@ -590,6 +601,15 @@ function render2027Outlook() {
     .join("");
 }
 
+function renderLastRefresh() {
+  if (!lastRefresh) return;
+  if (!(state.meta.lastLoadedAt instanceof Date) || Number.isNaN(state.meta.lastLoadedAt.getTime())) {
+    lastRefresh.textContent = "Last data refresh: unavailable";
+    return;
+  }
+  lastRefresh.textContent = `Last data refresh: ${formatCompactDateTime(state.meta.lastLoadedAt)}`;
+}
+
 function setupTableSorting() {
   readinessTableHeaders.forEach((header) => {
     header.style.cursor = "pointer";
@@ -767,6 +787,16 @@ function formatDate(value) {
 
 function formatCompactDate(value) {
   return new Date(value).toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "2-digit" });
+}
+
+function formatCompactDateTime(value) {
+  return new Date(value).toLocaleString("en-US", {
+    month: "numeric",
+    day: "numeric",
+    year: "2-digit",
+    hour: "numeric",
+    minute: "2-digit"
+  });
 }
 
 function statusClass(status) {
