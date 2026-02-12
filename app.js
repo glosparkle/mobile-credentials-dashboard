@@ -25,7 +25,6 @@ const deptCoverageNote = document.getElementById("deptCoverageNote");
 const phaseBars = document.getElementById("phaseBars");
 const timelineList = document.getElementById("timelineList");
 const timelineWindow = document.getElementById("timelineWindow");
-const healthGrid = document.getElementById("healthGrid");
 const forecastGrid = document.getElementById("forecastGrid");
 const departmentRows = document.getElementById("departmentRows");
 const globalStatus = document.getElementById("globalStatus");
@@ -361,7 +360,6 @@ function render() {
   renderDepartmentBars();
   renderPhaseBars();
   renderTimeline();
-  renderHealth();
   renderForecast();
   renderTable();
   renderStatus();
@@ -374,15 +372,14 @@ function renderKpis() {
   }
 
   const cards = [
-    { label: "Departments", value: formatNumber(state.summary.departments), trend: "Using acronym-keyed department records" },
     { label: "Total Headcount", value: formatNumber(state.summary.totalHeadcount), trend: "Headcount from roadmap sheets" },
-    { label: "With Rollout Dates", value: formatNumber(state.summary.withDates), trend: "Departments with a scheduled rollout date" },
     { label: "Digital Badge", value: formatNumber(state.summary.totalBadgeUsers), trend: "Derived from Excel conversion rates" },
     {
       label: "Conversion Rate",
       value: state.summary.totalHeadcount > 0 ? `${state.summary.conversionRate.toFixed(1)}%` : "-",
       trend: `${formatNumber(state.summary.totalBadgeUsers)} / ${formatNumber(state.summary.totalHeadcount)} across all depts`
-    }
+    },
+    buildDeliveryHealthCard()
   ];
 
   kpiGrid.innerHTML = cards
@@ -458,33 +455,15 @@ function renderTimeline() {
 
   const minDate = state.timeline[0].date;
   const maxDate = state.timeline[state.timeline.length - 1].date;
-  timelineWindow.textContent = `${formatDate(minDate)} to ${formatDate(maxDate)}`;
+  timelineWindow.textContent = `${formatCompactDate(minDate)} to ${formatCompactDate(maxDate)}`;
 
   timelineList.innerHTML = state.timeline
     .map(
       (item) => `
       <li>
-        <strong>${formatDate(item.date)}</strong> - ${escapeHtml(item.department)}
+        <strong>${formatCompactDate(item.date)}</strong> - ${escapeHtml(item.department)}
         <span class="badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
       </li>
-    `
-    )
-    .join("");
-}
-
-function renderHealth() {
-  if (!state.health.length) {
-    healthGrid.innerHTML = '<p class="empty-state">No health distribution available.</p>';
-    return;
-  }
-
-  healthGrid.innerHTML = state.health
-    .map(
-      (h) => `
-      <div class="health-row">
-        <span>${escapeHtml(h.label)}</span>
-        <strong>${h.count}</strong>
-      </div>
     `
     )
     .join("");
@@ -527,6 +506,22 @@ function renderForecast() {
     `
     )
     .join("");
+}
+
+function buildDeliveryHealthCard() {
+  const total = state.departments.length || 0;
+  const complete = state.departments.filter((d) => d.status === "Complete").length;
+  const onTrack = state.departments.filter((d) => d.status === "On Track").length;
+  const watch = state.departments.filter((d) => d.status === "Watch").length;
+  const atRisk = state.departments.filter((d) => d.status === "At Risk").length;
+  const favorable = complete + onTrack;
+  const favorablePct = total > 0 ? (favorable / total) * 100 : 0;
+
+  return {
+    label: "Delivery Health",
+    value: `${favorablePct.toFixed(0)}%`,
+    trend: `${favorable} favorable, ${watch} watch, ${atRisk} at risk`
+  };
 }
 
 function renderTable() {
@@ -741,6 +736,10 @@ function formatNumber(value) {
 
 function formatDate(value) {
   return new Date(value).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
+
+function formatCompactDate(value) {
+  return new Date(value).toLocaleDateString("en-US", { month: "numeric", day: "numeric", year: "2-digit" });
 }
 
 function statusClass(status) {
