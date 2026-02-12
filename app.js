@@ -403,7 +403,7 @@ function renderDepartmentBars() {
   departmentBars.innerHTML = allDepartments
     .map(
       (d) => `
-      <div class="coverage-item ${coverageBoxClass(d.quarter)}">
+      <div class="coverage-item">
         <div class="coverage-item-head">
           <span class="metric-row-name ${quarterClass(d.quarter)}" title="${escapeHtml(d.acronym)}">${escapeHtml(d.acronym)}</span>
           <span class="coverage-item-value">${(d.conversionRate || 0).toFixed(1)}%</span>
@@ -739,14 +739,6 @@ function quarterClass(quarter) {
   if (quarter === "Q2") return "quarter-q2";
   if (quarter === "Q3") return "quarter-q3";
   if (quarter === "Q4") return "quarter-q4";
-  return "";
-}
-
-function coverageBoxClass(quarter) {
-  if (quarter === "Q1") return "coverage-q1";
-  if (quarter === "Q2") return "coverage-q2";
-  if (quarter === "Q3") return "coverage-q3";
-  if (quarter === "Q4") return "coverage-q4";
   return "";
 }
 
