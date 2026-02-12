@@ -298,6 +298,26 @@ input[type="file"]::file-selector-button,
   color: #cc79a7;
 }
 
+.coverage-q1 {
+  background: #eaf4fb;
+  border-color: #c6ddf0;
+}
+
+.coverage-q2 {
+  background: #fdf6e6;
+  border-color: #edd8a8;
+}
+
+.coverage-q3 {
+  background: #e9f6ef;
+  border-color: #c3e5d1;
+}
+
+.coverage-q4 {
+  background: #f7edf5;
+  border-color: #e1c7da;
+}
+
 .coverage-item-value {
   font-size: 0.8rem;
   color: var(--text-muted);
