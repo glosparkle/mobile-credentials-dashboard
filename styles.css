@@ -182,6 +182,13 @@ input[type="file"]::file-selector-button,
   gap: 0.8rem;
 }
 
+.readiness-layout {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0.8rem;
+}
+
 .panel {
   background: var(--surface);
   border: 1px solid var(--line);
@@ -433,7 +440,8 @@ thead th {
 
 @media (max-width: 760px) {
   .panel-grid,
-  .kpi-grid {
+  .kpi-grid,
+  .readiness-layout {
     grid-template-columns: 1fr;
   }
 

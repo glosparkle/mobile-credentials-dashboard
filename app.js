@@ -26,6 +26,7 @@ const phaseBars = document.getElementById("phaseBars");
 const timelineList = document.getElementById("timelineList");
 const timelineWindow = document.getElementById("timelineWindow");
 const forecastGrid = document.getElementById("forecastGrid");
+const rollout2027Grid = document.getElementById("rollout2027Grid");
 const departmentRows = document.getElementById("departmentRows");
 const readinessTableHeaders = document.querySelectorAll("#readinessTable thead th[data-sort]");
 
@@ -360,6 +361,7 @@ function render() {
   renderTimeline();
   renderForecast();
   renderTable();
+  render2027Outlook();
 }
 
 function renderKpis() {
@@ -541,6 +543,47 @@ function renderTable() {
         <td>${d.rolloutDate ? formatDate(d.rolloutDate) : "-"}</td>
         <td><span class="status-text ${statusClass(d.status)}">${escapeHtml(d.status)}</span></td>
       </tr>
+    `
+    )
+    .join("");
+}
+
+function render2027Outlook() {
+  if (!state.departments.length) {
+    rollout2027Grid.innerHTML = '<p class="empty-state">No 2027 rollout data available.</p>';
+    return;
+  }
+
+  const in2027 = state.departments
+    .filter((d) => d.rolloutDate instanceof Date && d.rolloutDate.getFullYear() === 2027)
+    .sort((a, b) => a.rolloutDate - b.rolloutDate);
+
+  if (!in2027.length) {
+    rollout2027Grid.innerHTML = '<p class="empty-state">No departments currently scheduled in 2027.</p>';
+    return;
+  }
+
+  const firstDate = in2027[0].rolloutDate;
+  const lastDate = in2027[in2027.length - 1].rolloutDate;
+  const headcount2027 = in2027.reduce((sum, d) => sum + d.headcount, 0);
+  const onTrack2027 = in2027.filter((d) => d.status === "On Track" || d.status === "Complete").length;
+  const onTrackPct = (onTrack2027 / in2027.length) * 100;
+
+  const rows = [
+    { label: "Scheduled Depts", value: formatNumber(in2027.length) },
+    { label: "Planned Workforce", value: formatNumber(headcount2027) },
+    { label: "First Rollout", value: formatCompactDate(firstDate) },
+    { label: "Final Rollout", value: formatCompactDate(lastDate) },
+    { label: "On Track", value: `${onTrackPct.toFixed(0)}%` }
+  ];
+
+  rollout2027Grid.innerHTML = rows
+    .map(
+      (row) => `
+      <div class="health-row">
+        <span>${escapeHtml(row.label)}</span>
+        <strong>${escapeHtml(row.value)}</strong>
+      </div>
     `
     )
     .join("");
