@@ -571,7 +571,7 @@ function render2027Outlook() {
     .sort((a, b) => a.rolloutDate - b.rolloutDate);
 
   if (!in2027.length) {
-    rollout2027Grid.innerHTML = '<p class="empty-state">No departments currently scheduled in 2027.</p>';
+    rollout2027Grid.innerHTML = "";
     return;
   }
 
