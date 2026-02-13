@@ -447,7 +447,7 @@ function renderPhaseBars() {
     .map(
       (phase) => `
       <div class="metric-row">
-        <span class="metric-row-name">${phase}</span>
+        <span class="metric-row-name phase-label ${quarterClass(phase)}">${phase}</span>
         <div class="track">
           <div class="fill" style="width:100%"></div>
           <div class="fill-secondary" style="width:${phase === activeQuarter ? "100.0" : "0.0"}%"></div>
