@@ -365,17 +365,17 @@ input[type="file"]::file-selector-button,
   color: var(--text-muted);
 }
 
-.coverage-item.is-completed .metric-row-name,
-.coverage-item.is-completed .coverage-item-value {
-  color: #0405d2;
-}
-
 .coverage-item.is-in-progress .fill-secondary {
   background: #cde0e2;
 }
 
 .coverage-item.is-in-progress .fill {
-  background: #b3d7ff;
+  background: linear-gradient(90deg, #b3d7ff, #8ec3ff);
+}
+
+.coverage-item.is-in-progress .coverage-item-value,
+.coverage-item.is-completed .coverage-item-value {
+  font-weight: 700;
 }
 
 .timeline-list {
