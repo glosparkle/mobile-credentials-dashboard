@@ -324,7 +324,7 @@ input[type="file"]::file-selector-button,
 }
 
 .coverage-item.is-completed {
-  background: #4cb434;
+  background: #78e837;
 }
 
 .phase-label {
@@ -341,7 +341,6 @@ input[type="file"]::file-selector-button,
 
 .coverage-item .metric-row-name {
   font-weight: 700;
-  color: #ffffff !important;
 }
 
 .quarter-q1 {
@@ -363,6 +362,11 @@ input[type="file"]::file-selector-button,
 
 .coverage-item-value {
   font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.coverage-item.is-completed .metric-row-name,
+.coverage-item.is-completed .coverage-item-value {
   color: #ffffff;
 }
 
