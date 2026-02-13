@@ -715,7 +715,7 @@ function normalizeQuarter(value) {
 
 function normalizePercent(value) {
   if (!Number.isFinite(value)) return null;
-  if (value <= 0) return null;
+  if (value < 0) return null;
   const percent = value <= 1 ? value * 100 : value;
   return Math.max(0, Math.min(100, percent));
 }
@@ -821,8 +821,8 @@ function coverageStatusClass(dept) {
   today.setHours(0, 0, 0, 0);
   if (dept.rolloutDate > today) return "";
 
-  if (!Number.isFinite(dept.conversionRate)) return "";
-  if (dept.conversionRate >= 50) return "is-completed";
+  const conversion = Number.isFinite(dept.conversionRate) ? dept.conversionRate : 0;
+  if (conversion >= 50) return "is-completed";
   return "is-in-progress";
 }
 
