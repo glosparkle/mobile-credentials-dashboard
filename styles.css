@@ -374,6 +374,10 @@ input[type="file"]::file-selector-button,
   background: #cde0e2;
 }
 
+.coverage-item.is-in-progress .fill {
+  background: #b3d7ff;
+}
+
 .timeline-list {
   margin: 0;
   padding-left: 0;
