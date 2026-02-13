@@ -1,4 +1,4 @@
-const DATA_WORKBOOK_URL = "data/Mobile%20Credentials%20Departments.xlsx";
+const DATA_WORKBOOK_URL = "Data/Mobile%20Credentials%20Departments.xlsx";
 
 const state = {
   departments: [],
