@@ -309,7 +309,7 @@ input[type="file"]::file-selector-button,
 }
 
 .legend-swatch.completed {
-  background: #82e9f8;
+  background: #aff56d;
 }
 
 .coverage-item {
@@ -324,7 +324,7 @@ input[type="file"]::file-selector-button,
 }
 
 .coverage-item.is-completed {
-  background: #78e837;
+  background: #aff56d;
 }
 
 .phase-label {
@@ -370,7 +370,7 @@ input[type="file"]::file-selector-button,
 }
 
 .coverage-item.is-in-progress .fill {
-  background: linear-gradient(90deg, #b3d7ff, #8ec3ff);
+  background: linear-gradient(90deg, #cfe6ff, #a9d2ff);
 }
 
 .coverage-item.is-in-progress .coverage-item-value,
