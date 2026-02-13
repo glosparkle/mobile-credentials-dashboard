@@ -367,7 +367,11 @@ input[type="file"]::file-selector-button,
 
 .coverage-item.is-completed .metric-row-name,
 .coverage-item.is-completed .coverage-item-value {
-  color: #ffffff;
+  color: #0405d2;
+}
+
+.coverage-item.is-in-progress .fill-secondary {
+  background: #cde0e2;
 }
 
 .timeline-list {
