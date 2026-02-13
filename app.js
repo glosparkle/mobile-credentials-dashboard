@@ -416,7 +416,7 @@ function renderDepartmentBars() {
   departmentBars.innerHTML = allDepartments
     .map(
       (d) => `
-      <div class="coverage-item">
+      <div class="coverage-item ${coverageStatusClass(d)}">
         <div class="coverage-item-head">
           <span class="metric-row-name ${quarterClass(d.quarter)}" title="${escapeHtml(d.acronym)}">${escapeHtml(d.acronym)}</span>
           <span class="coverage-item-value">${(d.conversionRate || 0).toFixed(1)}%</span>
@@ -812,6 +812,18 @@ function quarterClass(quarter) {
   if (quarter === "Q3") return "quarter-q3";
   if (quarter === "Q4") return "quarter-q4";
   return "";
+}
+
+function coverageStatusClass(dept) {
+  if (!(dept && dept.rolloutDate instanceof Date) || Number.isNaN(dept.rolloutDate.getTime())) return "";
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (dept.rolloutDate > today) return "";
+
+  if (!Number.isFinite(dept.conversionRate)) return "";
+  if (dept.conversionRate >= 50) return "is-completed";
+  return "is-in-progress";
 }
 
 function escapeHtml(text) {
